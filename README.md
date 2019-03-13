@@ -4,7 +4,7 @@ Welcome to FLAM-Seq, nice to see you again.
 
 ## Software Dependencies
 
-Analysis pipeline is implemented in Python3 and requires <a href="https://github.com/alexdobin/STAR/blob/master/bin/Linux_x86_64/STARlong">STARlong</a>
+The analysis pipeline is implemented in Python3 and requires <a href="https://github.com/alexdobin/STAR/blob/master/bin/Linux_x86_64/STARlong">STARlong</a>
 and <a href="http://subread.sourceforge.net/">featureCounts</a> as addtional software. Packages and Software Versions used are listed below:
 
 ```
@@ -27,36 +27,36 @@ yaml 0.1.7
                         preprocess, quantTail, mapQuant, cleanGenomic, result
 
     preprocess          Preprocess input fastq reads. Check if reads contain adapters and place reads in correct orientation.
-                        This step creates ```/preprocessDir``` and creates ```*_preprocessed_filtered.fq``` files
-                        containing preprocessed reads and ```*_preprocessed_filtered_error.fq```, containing reads without
+                        This step creates /preprocessDir and creates *_preprocessed_filtered.fq files
+                        containing preprocessed reads and *_preprocessed_filtered_error.fq, containing reads without
                         adapters/poly(A) tails.
 
     quantTail           Quantify poly(A) tail length and sequence from preprocessed reads. This step uses 2 Algorithms
                         with different parameter combinations in order to extract putative poly(A) tail sequences from
-                        reads. This step creates ```/quantTailDir``` with ```*_trimmed_tail.fq```, containing reads with
-                        poly(A) tail trimmed for later mapping, ```*_umis.txt```, containing read names and read UMIs,
-                        ```*_tail_length.txt``` containing poly(A) tail length, sequence and read name and
-                        ```*_no_tail.fq``` containing reads without detectable poly(A) sequence.
+                        reads. This step creates /quantTailDir with *_trimmed_tail.fq, containing reads with
+                        poly(A) tail trimmed for later mapping, *_umis.txt, containing read names and read UMIs,
+                        *_tail_length.txt containing poly(A) tail length, sequence and read name and
+                        *_no_tail.fq containing reads without detectable poly(A) sequence.
 
     mapQuant            Map trimmed reads and assign reads to genes. This step maps reads with trimmed poly(A) tail
-                        sequences using STARLong to genome index specified in ```parameters.yaml```. Next aligned reads
-                        are assigned to gene models using FeatureCounts and GTF file specified in ```parameters.yaml```.
-                        This step creates ```/mapQuantGeneDir``` with ```*__Aligned.sortedByCoord.out.bam``` containing
-                        mapped read BAM file (sorted), ```*__Aligned.sortedByCoord.out.bam.featureCounts``` containing read names
+                        sequences using STARLong to genome index specified in parameters.yaml. Next aligned reads
+                        are assigned to gene models using FeatureCounts and GTF file specified in parameters.yaml.
+                        This step creates /mapQuantGeneDir with *__Aligned.sortedByCoord.out.bam containing
+                        mapped read BAM file (sorted), *_Aligned.sortedByCoord.out.bam.featureCounts containing read names
                         tagged with gene-of-origin.
 
     cleanGenomic        cleanGenomic compares the sequences derived from putative poly(A) tail with the genomic sequence
                         of the mapping location of the respective read. This step 'cleans' nucleotides from 5'ends of putative
                         poly(A) sequences from nucleotides which are encoded in the genome.
-                        This step requires genome fasta file specified in ```parameters.yaml```.
-                        It creates ```/cleanGenomicDir``` with ```*_cleaned.bam``` conataining aligned reads filtered by
-                        reads with valid poly(A) tail, ```*_clean_genomic_tail_length.txt```, containing cleaned poly(A)
-                        length/sequence and ```*_genomic_non_temp_tails.txt``` containing parts of each read that are not
+                        This step requires genome fasta file specified in parameters.yaml.
+                        It creates /cleanGenomicDir with *_cleaned.bam conataining aligned reads filtered by
+                        reads with valid poly(A) tail, *_clean_genomic_tail_length.txt, containing cleaned poly(A)
+                        length/sequence and *_genomic_non_temp_tails.txt containing parts of each read that are not
                         templated by genome.
 
-    result              Aggregate data from above steps into ```*_gene_polyA_length.csv```. This file contains for each
+    result              Aggregate data from above steps into *_gene_polyA_length.csv. This file contains for each
                         read poly(A) tail length and sequence, UMI and gene the read maps to. This step creates
-                        ```/resultDir```.
+                        /resultDir.
 
 
 ## Perform FLAM-Seq Analysis
@@ -75,6 +75,7 @@ The pipeline can the simply be run using the ```FLAMSeqAnalysis.py``` script:
 
 ```python3 /path/to/FLAMSeqAnalysis.py command -p /path/to/parameter.yaml```
 
+
 e.g. for running the complete pipeline
 
 ```python3 /path/to/FLAMSeqAnalysis.py all -p /path/to/parameter.yaml```
@@ -87,7 +88,7 @@ or for mapping and quantifying the reads
 
 ## Parameters.yaml
 
-A template ```*.yaml``` file is provided with the pipeline. The file can be renamed but structure of keywords withing the
+A template ```parameters.yaml``` file is provided with the pipeline. The file can be renamed but structure of keywords withing the
 file (everything before the ':') must not be changed. All paths need to be adapted to user requirements. An example is
 shown below:
 
