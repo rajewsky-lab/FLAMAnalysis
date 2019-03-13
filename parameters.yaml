@@ -1,0 +1,15 @@
+# parameters.yaml specification for FLAM-Seq analysis
+
+experimentName: "FLAMSeq_1"               # Name of Experiment. This will be prefix for generated analysis files.
+
+experiment:
+  rawFastq: "/path/to/pacbioreads.fq"     # Define Path to Input PacBio / Nanopore Reads in fastq format
+  outputDir: "/path/to/outputDir"         # Define Path to Output dir for writing analysis results. Pipeline will generate of dir is not present.
+  genomeIndexDir: "/path/to/STARIndex"    # Define Dir for STARLong Index for Mapping
+  annotationGTF: "/path/to/GTFFile"       # GTF File containing gene annotations for assigning reads to genes
+  genomeFasta: "/path/to/genomeFasta"     # Genome Fasta File containing genome sequence (that the index was generated from)
+
+software:
+  STARlong: "/path/to/STARlong"           # Path to STARlong executable
+  featureCounts: "/path/to/featureCounts" # Path to FeatureCounts executable
+  nThreads: 8                             # Number of threads for mapping reads
