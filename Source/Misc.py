@@ -42,7 +42,7 @@ class Misc():
     def checkFile(filePath, fileName):
     # Check if file exists at path and can be read
 
-        if os.path.exists(filePath) and os.access(filePath, os.W_OK):
+        if os.path.exists(filePath) and os.access(filePath, os.R_OK):
             sys.stdout.write("{} Accessible at {}\n".format(fileName, filePath))
         else:
             raise FileNotFoundError("{} cannot be accessed at {}\n".format(fileName, filePath))

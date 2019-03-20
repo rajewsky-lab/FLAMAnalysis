@@ -32,10 +32,13 @@ class CleanGenomic():
         self.genomeFastaPath = parameters.getParametersByKey('experiment')['genomeFasta']
         self.cleanPaLenPath = os.path.join(outputDir, 'quantTailDir', self.sampleName + '_tail_length.txt')
 
+        self.inputFastqPath = parameters.getParametersByKey('experiment')['rawFastq']
+
         Misc.Misc.checkFile(self.filteredFastqPath, 'FilteredFastq')
         Misc.Misc.checkFile(self.mappedBAMPath, 'MappdBAM')
         Misc.Misc.checkFile(self.genomeFastaPath, 'GenomeFasta')
         Misc.Misc.checkFile(self.cleanPaLenPath, 'CleanPolyA')
+        Misc.Misc.checkFile(self.inputFastqPath, 'Input Fastq')
 
         # Define Parameters for Tail Clearing
         self.alnRawOverlap = 50
@@ -79,6 +82,9 @@ class CleanGenomic():
                 rNamePaSeqDict[rName] = paSeq
         return rNamePaSeqDict
 
+    # DEPRECATED FOR RELEASE VERSION; causes different results than
+    # clean_genomic.py
+    # Use for subsequent versions
     def parseFilterFastq(self):
     # Parse _preprocessed_filtered.fq and return dict with rName and Sequence
 
@@ -89,6 +95,28 @@ class CleanGenomic():
                 rNameFastqSeqDict[e.name] = e.sequence
         return rNameFastqSeqDict
 
+
+    # Parse Raw Reads for processing
+    def parseRawFastq(self):
+
+        rNameInputFqSeqDict = dict()
+
+        # Define RT primer sites in fwd and rev orientation
+        ct_fwd_seq = 'CCCCTTTT'
+        ag_rev_seq = 'AAAAGGGG'
+
+        with pysam.FastxFile(self.inputFastqPath) as inputFq:
+
+            for e in inputFq:
+                eSeq = e.sequence
+
+                if ct_fwd_seq in eSeq[:100]:
+                    rNameInputFqSeqDict[e.name] = eSeq
+                elif ag_rev_seq in eSeq[-100:]:
+                    rNameInputFqSeqDict[e.name] = Misc.Misc.rcSeq(eSeq)
+
+        return rNameInputFqSeqDict
+
     def cleanTails(self):
     # Method compares 5' ends of poly(A) tail to genomic sequence of respective genes and writes files w/
     # - clean BAM alignments
@@ -98,7 +126,10 @@ class CleanGenomic():
         # Get Input data
 
         rNamePaDict = self.parseCleanPolyA()
-        rNameFastqDict = self.parseFilterFastq()
+        rNameFastqDict = self.parseRawFastq()
+
+        print(len(rNamePaDict))
+        print(len(rNameFastqDict))
 
         genomeFasta = pysam.FastaFile(self.genomeFastaPath)
         alnBamFile = pysam.AlignmentFile(self.mappedBAMPath, 'rb')

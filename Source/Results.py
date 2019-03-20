@@ -55,6 +55,11 @@ class Results():
         umiDf = pd.read_csv(self.umiPath, sep=',', header=None)
         umiDf.columns = ['umi','read']
 
+        #TODO: Chnage BUF for future release versions
+        # Ignore first line in umiDf. This is necessary, as a Bug in the implementation used to process data for the
+        # manuscript ingores the first line in the umi file. This can be adapted for future versions
+        umiDf = umiDf.iloc[1:,]
+
         # Merge Dataframes by 'read'
 
         geneTableMerge = pd.merge(featCntDf, genCleanTailDf, on='read', how='inner')

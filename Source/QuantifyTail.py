@@ -59,7 +59,7 @@ class QuantifyTail():
                 # Check if poly(A) Tail can be found
                 # find_tail_length returns tail length, tail sequence, UMI sequence
 
-                tail_gen = self.find_tail_length(e.sequence)
+                tail_gen = self.find_tail_length(e.sequence, threshold=25)
 
                 # If a) tails is found and b) more than 20 nt sequence are left (for later mapping)
                 if len(tail_gen[1]) > 0 and len(e.sequence) - (e.sequence.index(tail_gen[1]) + len(tail_gen[1])) >= 20:
