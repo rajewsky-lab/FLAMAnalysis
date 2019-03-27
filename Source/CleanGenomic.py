@@ -106,8 +106,10 @@ class CleanGenomic():
         ag_rev_seq = 'AAAAGGGG'
 
         with pysam.FastxFile(self.inputFastqPath) as inputFq:
-
             for e in inputFq:
+                # Remove Backslash from Fastq Read Names
+                e.name = e.name.replace('/', '_')
+
                 eSeq = e.sequence
 
                 if ct_fwd_seq in eSeq[:100]:
@@ -127,9 +129,6 @@ class CleanGenomic():
 
         rNamePaDict = self.parseCleanPolyA()
         rNameFastqDict = self.parseRawFastq()
-
-        print(len(rNamePaDict))
-        print(len(rNameFastqDict))
 
         genomeFasta = pysam.FastaFile(self.genomeFastaPath)
         alnBamFile = pysam.AlignmentFile(self.mappedBAMPath, 'rb')
