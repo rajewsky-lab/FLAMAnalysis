@@ -21,10 +21,10 @@ class Preprocess()
 
 # Declare Module Level Vars for defining threshold for defining poly(A) Tails
 thresholdA = 10
-thresholdG = 9
+#thresholdG = 9
 
-combAG = 'A' * thresholdA + 'G' * thresholdG
-combCT = 'C' * thresholdG + 'T' * thresholdA
+#combAG = 'A' * thresholdA + 'G' * thresholdG
+#combCT = 'C' * thresholdG + 'T' * thresholdA
 
 class Preprocess():
 
@@ -108,6 +108,9 @@ class Preprocess():
 
     def assessRead(self, read):
     # Check if reads contains adapter sequence (9xG's) and 10 nt oligo dT or rev comp
+        adapter = self.parameters.getParametersByKey("experiment")["adapter"]
+        combAG = "A" * thresholdA + adapter
+        combCT = Misc.Misc.rcSeq(adapter) + "T" * thresholdA
 
         if (regex.findall('(' + combAG + '){s<=1}', read) or
                 regex.findall('(' + 'AA' + combAG + '){s<=2}', read) or

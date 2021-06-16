@@ -22,6 +22,7 @@ class CleanGenomic():
         # Define Output Dir
         outputDir = parameters.getParametersByKey('experiment')['outputDir']
         self.sampleName = parameters.getExpName()
+        self.parameters = parameters
 
         self.cleanGenDir = os.path.join(outputDir, 'cleanGenomicDir')
         Misc.Misc.checkDir(self.cleanGenDir, 'cleanGenomicDir')
@@ -102,8 +103,9 @@ class CleanGenomic():
         rNameInputFqSeqDict = dict()
 
         # Define RT primer sites in fwd and rev orientation
-        ct_fwd_seq = 'CCCCTTTT'
-        ag_rev_seq = 'AAAAGGGG'
+        adapter = self.parameters.getParametersByKey("experiment")["adapter"]
+        ct_fwd_seq = Misc.Misc.rcSeq(adapter)[-4:] + "T" * 4
+        ag_rev_seq = "A" * 4 + adapter[:4]
 
         with pysam.FastxFile(self.inputFastqPath) as inputFq:
             for e in inputFq:
