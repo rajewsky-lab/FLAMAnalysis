@@ -84,7 +84,7 @@ class Preprocess():
                 if res == 1:
                     e.sequence = Misc.Misc.rcSeq(e.sequence)
                     fq_filter_pos.write(str(e) + '\n')
-                    cnt_filter = 1
+                    cnt_filter += 1
                 elif res == -1:
                     fq_filter_pos.write(str(e) + '\n')
                     cnt_filter += 1
