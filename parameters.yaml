@@ -8,6 +8,8 @@ experiment:
   genomeIndexDir: "/path/to/STARIndex"    # Define Dir for STARLong Index for Mapping
   annotationGTF: "/path/to/GTFFile"       # GTF File containing gene annotations for assigning reads to genes
   genomeFasta: "/path/to/genomeFasta"     # Genome Fasta File containing genome sequence (that the index was generated from)
+  adapter: "GGGGGGGGG"
+  primer3: "TCTCGCTATAGTGAGTCGTATTACC"
 
 software:
   STARlong: "/path/to/STARlong"           # Path to STARlong executable

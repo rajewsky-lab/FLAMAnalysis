@@ -7,14 +7,15 @@ from collections import Counter
 import pysam
 from itertools import islice
 
-pcr_handle = 'GGTAATACGACTCACTATAGCGAGA'
-pcr_handle2 = 'TGAGTCGGCAGAGAACTGGCGAA'
+#pcr_handle = 'GGTAATACGACTCACTATAGCGAGA'
+#pcr_handle2 = 'TGAGTCGGCAGAGAACTGGCGAA'
 
 class QuantifyTail():
 
     def __init__(self, parameters):
         outputDir = parameters.getParametersByKey('experiment')['outputDir']
         self.sampleName = parameters.getExpName()
+        self.parameters = parameters
 
         # Define Input Reads
         preprocessDir = os.path.join(outputDir, 'preprocessDir')
@@ -152,12 +153,15 @@ class QuantifyTail():
 
         tail_start = read.find(tail)
 
+        adapter = Misc.Misc.rcSeq(self.parameters.getParametersByKey("experiment")["adapter"])
+        pcr_handle = Misc.Misc.rcSeq(self.parameters.getParametersByKey("experiment")["primer3"])
+
         # UMI extraction
-        if read[tail_start - 9:tail_start] == 'C' * 9:
-            umi_end = tail_start - 9
+        if read[:tail_start].endswith(adapter):
+            umi_end = tail_start - len(adapter)
             umi = read[(umi_end - 10):umi_end]
-        elif 'C' * 8 in read[tail_start - 9:tail_start]:
-            umi_end = tail_start - 8 - read[tail_start - 9:tail_start].find('C' * 8)
+        elif adapter[:-1] in read[tail_start - len(adapter):tail_start]:
+            umi_end = tail_start - len(adapter) + read[tail_start - len(adapter):tail_start].find(adapter[:-1])
             umi = read[(umi_end - 10):umi_end]
         elif read.find(pcr_handle[-10:]) != -1:
             umi = read[read.find(pcr_handle[-10:]) + 10:read.find(pcr_handle[-10:]) + 20]
