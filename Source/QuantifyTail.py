@@ -161,7 +161,7 @@ class QuantifyTail():
             umi_end = tail_start - len(adapter)
             umi = read[(umi_end - 10):umi_end]
         elif adapter[:-1] in read[tail_start - len(adapter):tail_start]:
-            umi_end = tail_start - len(adapter[:-1]) - read[tail_start - len(adapter):tail_start].find(adapter[:-1])
+            umi_end = tail_start - len(adapter) + read[tail_start - len(adapter):tail_start].find(adapter[:-1])
             umi = read[(umi_end - 10):umi_end]
         elif read.find(pcr_handle[-10:]) != -1:
             umi = read[read.find(pcr_handle[-10:]) + 10:read.find(pcr_handle[-10:]) + 20]
